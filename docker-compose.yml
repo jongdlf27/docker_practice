@@ -1,0 +1,56 @@
+version: '3.7'
+networks:
+  aitok:
+    name: bridge_aitok
+    driver: bridge
+    driver_opts:
+      com.docker.network.driver.mtu: 1430
+services:
+    aitok_react:
+        image: react:v1.0
+        container_name: aitok_react
+        # build:
+        #   context: ./frontend
+        #   dockerfile: ./Dockerfile.react
+        command: npm start
+        restart: always
+        ports:
+          - 3000:3000
+        volumes:
+          - ./frontend:/app
+        networks:
+          - aitok
+    aitok_node:
+        image: node:v1.0
+        container_name: aitok_node
+        # build:
+        #   context: ./backend
+        #   dockerfile: ./Dockerfile.node
+        command: npm run-script dev
+        restart: always
+        ports:
+          - 5000:5000
+        networks:
+          - aitok
+        volumes:
+          - ./backend:/app
+    aitok_db:
+        image: mariadb:v1.0
+        container_name: aitok_db
+        hostname: 'db'
+        build:
+          context: ./
+          dockerfile: ./Dockerfile.mysql
+        restart: always
+        ports:
+            - 3306:3306
+        environment:
+            MYSQL_DATABASE: "aitok"
+            MYSQL_ROOT_PASSWORD: "ABcd123"
+        volumes:
+            - mariadb_data:/var/lib/mysql
+        networks:
+            - aitok
+  
+volumes:
+  mariadb_data:

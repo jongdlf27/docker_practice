@@ -1,0 +1,10 @@
+FROM mysql:5.7
+RUN apt-get update && apt-get install -y vim
+
+LABEL version="1.0"
+LABEL description="docker image for mysql"
+LABEL maintainer = "jongdlf27@naver.com"
+
+EXPOSE 3306
+
+CMD ["mysqld"]

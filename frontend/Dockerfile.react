@@ -1,0 +1,15 @@
+FROM node:14.13.1
+RUN apt-get update && apt-get install -y vim
+
+LABEL version="1.0"
+LABEL description="docker image for react.js"
+LABEL maintainer = "jongdlf27@naver.com"
+
+RUN mkdir -p /app
+WORKDIR /app
+COPY . .
+#RUN npm install
+
+EXPOSE 3000
+
+CMD ["tail","-f","/dev/null"]
